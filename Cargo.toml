@@ -1,0 +1,7 @@
+[package]
+name = "pygamma_rust"
+version = "0.1.0"
+authors = ["Matthieu Baumann <matthieu.baumann@astro.unistra.fr>"]
+edition = "2018"
+
+[dependencies]
