@@ -4,21 +4,13 @@ subtitle: PyGamma 2019 Heidelberg
 author: Matthieu Baumann
 date: 03/19/19
 fontsize: 10pt
-output:
- beamer_presentation:
-# keep_tex: true
-# toc: true
- slide_level: 3
- includes:
- in_header: ~/Dropbox/teaching/clemson-beamer-header-simple.txt
- after_body: ~/Dropbox/teaching/table-of-contents.txt
 ---
 
 ## Summuary
 
 1. Rust programming language introduction
-2. Use of Rust extension codes into the **cdshealpix** Python package
-3. **cdshealpix** deployment for Windows, MacOS and Linux
+2. Use of Rust extension codes into the [**cdshealpix**](https://github.com/cds-astro/cds-healpix-python) Python package
+3. [**cdshealpix**](https://github.com/cds-astro/cds-healpix-python) deployment for Windows, MacOS and Linux
 
 # Part I: Rust programming language presentation
 
@@ -104,12 +96,12 @@ cdshealpix = "0.1.5"
 * Begin to be used in the game industry as a replacement for C++. See [*here*](https://www.gamefromscratch.com/post/2018/07/31/Rust-for-Game-Development.aspx).
 * Over 70% of developers who work with Rust contribute to **open source** ([*stackoverflow latest 2018 survey*](https://insights.stackoverflow.com/survey/2018/))
 
-# Part II: use of Rust extension codes into the **cdshealpix** Python package
+# Part II: use of Rust extension codes into the [**cdshealpix**](https://github.com/cds-astro/cds-healpix-python) Python package
 
 ## cdshealpix presentation
 
 * HEALPix python package wrapping the [*cdshealpix*](https://crates.io/crates/cdshealpix) Rust crate developed by FX Pineau.
-* Provides healpix_to_lonlat, lonlat_to_healpix, vertices, neighbours, cone_search, polygon_search and elliptical_cone_search methods.
+* Provides *healpix_to_lonlat*, *lonlat_to_healpix*, *vertices*, *neighbours*, *cone_search*, *polygon_search* and *elliptical_cone_search* methods.
 
 Cone Search             |  Polygon Search
 :-------------------------:|:-------------------------:
@@ -306,7 +298,7 @@ pub extern "C" fn bmoc_free(ptr: *mut PyBMOC) {
 * Solution: wraps the result of **hpx_query_cone_approx** structure into a class
 
 ```Python
-class ConeSearchLonLat(object):
+class ConeSearchLonLat:
     def __init__(self, d, delta_d, lon, lat, r):
         self.data = lib.hpx_query_cone_approx(
             d, depth_d, lon, lat, r
@@ -347,7 +339,11 @@ def cone_search_lonlat(lon, lat, radius,
 
 * setuptools_rust package is used to:
 1. Build the dynamic library (need cargo compiled installed)
-2. Pack all the python files contained **cdshealpix/** + the dynamic library into a wheel
+2. Pack into a wheel:
+
+    * The python files contained in **cdshealpix/**
+    * The built dynamic library
+    * The C file containing binding function prototypes
 
 ## Content of the setup.py
 ```Python
@@ -369,11 +365,12 @@ setup(...
 
 ## Travis-CI
 
-* Travis-CI is used for testing and deploying the wheels for Linux and MacOS
+* [*Travis-CI*](https://travis-ci.org/cds-astro/cds-healpix-python) is used for testing and deploying the wheels for Linux and MacOS
 * The [*.travis.yml*](https://github.com/cds-astro/cds-healpix-python/blob/master/.travis.yml) contains 2 stages: a testing & a deployment one
 * Each stage is divided into jobs responsible for testing (resp. deploying) **cdshealpix** for a specific platform and python version.
 * Deployment jobs use [*cibuildwheel*](https://github.com/joerick/cibuildwheel) tool. cibuildwheel uses docker with manylinux32/64bits images for generating the wheels for linux.
 * See the script for deploying the wheels for linux/macos [*here*](https://github.com/cds-astro/cds-healpix-python/blob/master/deploy.sh){color='blue'}.
+* List of the [*deployed wheels*](https://pypi.org/project/cdshealpix/#files) on PyPI.
 
 # Questions ?
 
